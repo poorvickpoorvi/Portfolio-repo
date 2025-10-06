@@ -3,25 +3,24 @@ name: Deploy Portfolio to S3
 on:
   push:
     branches:
-      - main   # Change to 'master' if your repo's default branch is master
+      - main   # or 'master' if that's your default branch
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest   # GitHub gives a free Linux machine to run this job
+    runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Download your repo code into that machine
+      # Step 1: Checkout repository code
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      # Step 2: Upload files from repo → S3 bucket
+      # Step 2: Sync files to S3
       - name: Deploy to S3
         uses: aws-actions/s3-sync@v2
         with:
-          bucket: my-portfolio-poorvick
+          bucket: my-portfolio-poorvick      # your actual bucket name
           region: us-east-1
-          source: . 
+          source: .                          # means upload all files in repo
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AKIA2LIP2ISUOZX3PKL4 }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.Xq+AUOnfK3CaWxSrBGIN/HMSchqvB1gU+a9h5TvH }}
-
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
