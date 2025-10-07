@@ -402,7 +402,7 @@
     }
     .certification__frame:hover {
       transform: scale(1.03);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+      box-shadow: 0 4px 20px rgba(89, 38, 38, 0.12);
     }
     .certification__img {
       width: 260px;
@@ -558,6 +558,30 @@
         grid-template-columns: 1fr;
       }
     }
+    /* Certificate Modal Animations */
+    #certModal {
+      opacity: 0;
+      transition: opacity 0.35s cubic-bezier(.4,0,.2,1);
+      pointer-events: none;
+      display: flex;
+    }
+    #certModal.certModal--visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    #certModalImg {
+      transform: scale(0.8);
+      opacity: 0;
+      transition: transform 0.35s cubic-bezier(.4,0,.2,1), opacity 0.35s cubic-bezier(.4,0,.2,1);
+    }
+    #certModal.certModal--visible #certModalImg {
+      transform: scale(1);
+      opacity: 1;
+    }
+    #certModal.certModal--hide #certModalImg {
+      transform: scale(0.8);
+      opacity: 0;
+    }
   </style>
 </head>
 <body>
@@ -619,7 +643,11 @@
             <h1 class="home__title">Hi, I'm Poorvick</h1>
           </div>
           <h3 class="home__subtitle">Cloud & Devops Engineering</h3>
-          <p class="home__description">Cloud computing enthusiast with a solid foundation in designing, building, and optimizing cloud-native solutions with quality-driven execution.</p>
+          <p class="home__description">Passionate Cloud and DevOps enthusiast with AWS training and hands-on experience deploying
+serverless cloud applicaons using AWS Lambda, Amazon S3, API Gateway, and DynamoDB. Skilled
+in Python, Java. Dedicated to building scalable, secure cloud soluons using DevOps and CI/CD
+pracces.
+</p>
           <a href="#contact" class="button home__button">
             Contact Me<i class="uil uil-message button__icon"></i>
           </a>
@@ -673,6 +701,11 @@
     <section class="section" id="certifications">
       <h2 class="section__title">Certifications</h2>
       <div class="certifications__grid container">
+        <div class="certification__frame">
+          <img src="Certifications/AWS Certified Cloud Practitioner certificate_page-0001.jpg" alt="AWS Course Completion" class="certification__img">
+          <div class="certification__title">AWS Course Completion</div>
+          <div class="certification__subtitle">AWS</div>
+        </div>
         <div class="certification__frame">
           <img src="Certifications/AWS_Academy_Graduate___AWS_Academy_Cloud_Foundations_Badge20241022-7-txd6hx_page-0001.jpg" alt="AWS Academy Graduate" class="certification__img">
           <div class="certification__subtitle">AWS Academy Cloud Foundations</div>
@@ -832,6 +865,37 @@
     };
     document.getElementById('certModal').onclick = function(e) {
       if (e.target === this) this.style.display = 'none';
+    };
+    // Certificate modal with animation
+    const certModal = document.getElementById('certModal');
+    const certModalImg = document.getElementById('certModalImg');
+    const certModalClose = document.getElementById('certModalClose');
+
+    document.querySelectorAll('.certification__img').forEach(img => {
+      img.addEventListener('click', function() {
+        certModalImg.src = this.src;
+        certModal.style.display = 'flex';
+        // Remove hide class if present
+        certModal.classList.remove('certModal--hide');
+        // Trigger reflow for animation
+        void certModal.offsetWidth;
+        certModal.classList.add('certModal--visible');
+      });
+    });
+
+    function closeCertModal() {
+      certModal.classList.remove('certModal--visible');
+      certModal.classList.add('certModal--hide');
+      setTimeout(() => {
+        certModal.style.display = 'none';
+        certModal.classList.remove('certModal--hide');
+        certModalImg.src = '';
+      }, 350);
+    }
+
+    certModalClose.onclick = closeCertModal;
+    certModal.onclick = function(e) {
+      if (e.target === this) closeCertModal();
     };
   </script>
 </body>
